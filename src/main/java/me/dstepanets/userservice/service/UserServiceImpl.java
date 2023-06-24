@@ -18,6 +18,7 @@ public class UserServiceImpl implements UserService {
 
 	private UserRepository userRepository;
 	private Mapper<User, UserDto> mapper;
+	private Validator<UserDto> validator;
 
 	@Override
 	public List<User> getAllUsers() {
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createUser(UserDto userDto) {
+		validator.validate(userDto);
 		return userRepository.save(mapper.dtoToEntity(userDto));
 	}
 }
