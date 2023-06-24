@@ -1,6 +1,7 @@
 package me.dstepanets.userservice.service;
 
-import me.dstepanets.userservice.domain.User;
+import me.dstepanets.userservice.dto.UserDto;
+import me.dstepanets.userservice.entity.User;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface UserService {
 
 	User getUserById(ObjectId id);
 
-	User createUser(User user);
+	User createUser(UserDto userDto);
 }

@@ -1,7 +1,7 @@
 package me.dstepanets.userservice.assembler;
 
 import me.dstepanets.userservice.controller.UserController;
-import me.dstepanets.userservice.domain.User;
+import me.dstepanets.userservice.entity.User;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
@@ -14,8 +14,10 @@ public class UserEntityModelAssembler implements RepresentationModelAssembler<Us
 
 	@Override
 	public EntityModel<User> toModel(User entity) {
-		return EntityModel.of(entity,
+		return EntityModel.of(
+				entity,
 				linkTo(methodOn(UserController.class).getUserById(entity.getId().toHexString())).withSelfRel(),
-				linkTo(methodOn(UserController.class).getAllUsers()).withRel("users"));
+				linkTo(methodOn(UserController.class).getAllUsers()).withRel("users")
+		);
 	}
 }

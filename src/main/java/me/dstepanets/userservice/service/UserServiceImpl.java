@@ -1,7 +1,9 @@
 package me.dstepanets.userservice.service;
 
 import lombok.AllArgsConstructor;
-import me.dstepanets.userservice.domain.User;
+import me.dstepanets.userservice.dto.Mapper;
+import me.dstepanets.userservice.dto.UserDto;
+import me.dstepanets.userservice.entity.User;
 import me.dstepanets.userservice.exception.UserNotFoundException;
 import me.dstepanets.userservice.repository.UserRepository;
 import org.bson.types.ObjectId;
@@ -15,6 +17,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
 	private UserRepository userRepository;
+	private Mapper<User, UserDto> mapper;
 
 	@Override
 	public List<User> getAllUsers() {
@@ -27,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User createUser(User user) {
-		return userRepository.save(user);
+	public User createUser(UserDto userDto) {
+		return userRepository.save(mapper.dtoToEntity(userDto));
 	}
 }

@@ -2,7 +2,8 @@ package me.dstepanets.userservice.controller;
 
 import lombok.AllArgsConstructor;
 import me.dstepanets.userservice.assembler.UserEntityModelAssembler;
-import me.dstepanets.userservice.domain.User;
+import me.dstepanets.userservice.dto.UserDto;
+import me.dstepanets.userservice.entity.User;
 import me.dstepanets.userservice.service.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,8 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<EntityModel<User>> createUser(@RequestBody User user) {	// TODO use DTO
-		User createdUser = userService.createUser(user);
+	public ResponseEntity<EntityModel<User>> createUser(@RequestBody UserDto userDto) {
+		User createdUser = userService.createUser(userDto);
 		EntityModel<User> userEntityModel = entityModelAssembler.toModel(createdUser);
 
 		return ResponseEntity
