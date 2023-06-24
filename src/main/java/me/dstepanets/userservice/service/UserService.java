@@ -13,4 +13,6 @@ public interface UserService {
 	User getUserById(ObjectId id);
 
 	User createUser(UserDto userDto);
+
+	User updateUser(ObjectId id, UserDto updatedUser);
 }

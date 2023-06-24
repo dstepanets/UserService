@@ -35,4 +35,13 @@ public class UserServiceImpl implements UserService {
 		validator.validate(userDto);
 		return userRepository.save(mapper.dtoToEntity(userDto));
 	}
+
+	public User updateUser(ObjectId id, UserDto updatedUser) {
+		User existingUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+		validator.validate(updatedUser);
+		existingUser.setName(updatedUser.getName());
+		existingUser.setEmail(updatedUser.getEmail());
+
+		return userRepository.save(existingUser);
+	}
 }

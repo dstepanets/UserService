@@ -40,7 +40,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{id}")
-	public EntityModel<User> getUserById(@PathVariable("id") String id) {
+	public EntityModel<User> getUserById(@PathVariable String id) {
 		User user = userService.getUserById(new ObjectId(id));
 
 		return entityModelAssembler.toModel(user);
@@ -54,5 +54,12 @@ public class UserController {
 		return ResponseEntity
 				.created(userEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
 				.body(userEntityModel);
+	}
+
+	@PutMapping("/{id}")
+	public EntityModel<User> updateUser(@PathVariable String id, @RequestBody UserDto userDto) {
+		User updatedUser = userService.updateUser(new ObjectId(id), userDto);
+
+		return entityModelAssembler.toModel(updatedUser);
 	}
 }
