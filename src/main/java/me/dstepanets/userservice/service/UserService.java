@@ -10,4 +10,6 @@ public interface UserService {
 	List<User> getAllUsers();
 
 	User getUserById(ObjectId id);
+
+	User createUser(User user);
 }

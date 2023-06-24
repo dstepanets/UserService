@@ -8,11 +8,10 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +32,9 @@ public class UserController {
 
 		return CollectionModel.of(
 				userModels, 
-				WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getAllUsers()).withSelfRel()
+				WebMvcLinkBuilder
+						.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getAllUsers())
+						.withSelfRel()
 		);
 	}
 
@@ -42,5 +43,15 @@ public class UserController {
 		User user = userService.getUserById(new ObjectId(id));
 
 		return entityModelAssembler.toModel(user);
+	}
+
+	@PostMapping
+	public ResponseEntity<EntityModel<User>> createUser(@RequestBody User user) {	// TODO use DTO
+		User createdUser = userService.createUser(user);
+		EntityModel<User> userEntityModel = entityModelAssembler.toModel(createdUser);
+
+		return ResponseEntity
+				.created(userEntityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+				.body(userEntityModel);
 	}
 }
