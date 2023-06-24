@@ -15,4 +15,6 @@ public interface UserService {
 	User createUser(UserDto userDto);
 
 	User updateUser(ObjectId id, UserDto updatedUser);
+
+	void deleteUser(ObjectId id);
 }

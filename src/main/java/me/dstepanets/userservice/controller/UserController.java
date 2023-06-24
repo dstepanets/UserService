@@ -62,4 +62,11 @@ public class UserController {
 
 		return entityModelAssembler.toModel(updatedUser);
 	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteUser(@PathVariable("id") String id) {
+		userService.deleteUser(new ObjectId(id));
+		
+		return ResponseEntity.noContent().build();
+	}
 }

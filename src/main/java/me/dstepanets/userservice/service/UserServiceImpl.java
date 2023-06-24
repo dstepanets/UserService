@@ -44,4 +44,12 @@ public class UserServiceImpl implements UserService {
 
 		return userRepository.save(existingUser);
 	}
+
+	public void deleteUser(ObjectId id ) {
+		if (!userRepository.existsById(id)) {
+			throw new UserNotFoundException(id);
+		}
+
+		userRepository.deleteById(id);
+	}
 }
