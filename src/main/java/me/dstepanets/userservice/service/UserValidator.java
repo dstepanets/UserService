@@ -1,6 +1,7 @@
 package me.dstepanets.userservice.service;
 
 import me.dstepanets.userservice.dto.UserDto;
+import me.dstepanets.userservice.exception.InvalidUserException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -13,13 +14,17 @@ public class UserValidator implements Validator<UserDto> {
 
 	@Override
 	public void validate(UserDto userDto) {
-		Assert.notNull(userDto, "User cannot be null");
-		Assert.hasText(userDto.getName(), "User name cannot be empty");
-		Assert.isTrue(
-				Pattern.compile(EMAIL_PATTERN)
-						.matcher(userDto.getEmail())
-						.matches(), 
-				"Invalid User email"
-		);
+		try {
+			Assert.notNull(userDto, "User cannot be null");
+			Assert.hasText(userDto.getName(), "User name cannot be empty");
+			Assert.isTrue(
+					Pattern.compile(EMAIL_PATTERN)
+							.matcher(userDto.getEmail())
+							.matches(), 
+					"Invalid User email"
+			);
+		} catch (IllegalArgumentException e) {
+			throw new InvalidUserException(e);
+		}
 	}
 }

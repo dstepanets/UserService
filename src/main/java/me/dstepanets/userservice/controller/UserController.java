@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import me.dstepanets.userservice.assembler.UserEntityModelAssembler;
 import me.dstepanets.userservice.dto.UserDto;
 import me.dstepanets.userservice.entity.User;
+import me.dstepanets.userservice.exception.InvalidUserException;
+import me.dstepanets.userservice.exception.UserNotFoundException;
 import me.dstepanets.userservice.service.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,5 +71,19 @@ public class UserController {
 		userService.deleteUser(new ObjectId(id));
 		
 		return ResponseEntity.noContent().build();
+	}
+
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+		return ResponseEntity
+				.status(HttpStatus.NOT_FOUND)
+				.body(ex.getMessage());
+	}
+
+	@ExceptionHandler(InvalidUserException.class)
+	public ResponseEntity<String> handleInvalidUserException(InvalidUserException ex) {
+		return ResponseEntity
+				.status(HttpStatus.BAD_REQUEST)
+				.body(ex.getMessage() + ": " + ex.getCause().getMessage());
 	}
 }
